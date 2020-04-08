@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS halloscream.customer (
 );
 CREATE TABLE IF NOT EXISTS halloscream.address (
 	address_id INT AUTO_INCREMENT,
-    fk_customer_id INT,
+    fk_customer_id INT NOT NULL,
     address1 VARCHAR(50) NOT NULL,
     address2 VARCHAR(50) DEFAULT NULL, # Address2 may not always be populated so defaults to NULL if no data entered for this field
     town VARCHAR(20) NOT NULL,
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS halloscream.product (
 );
 CREATE TABLE IF NOT EXISTS halloscream.`order` (
 	order_id INT AUTO_INCREMENT,
-    fk_customer_id INT,
-    fk_product_id INT,
+    fk_customer_id INT NOT NULL,
+    fk_product_id INT NOT NULL,
     quantity TINYINT NOT NULL,
     date_placed DATETIME DEFAULT CURRENT_TIMESTAMP, # Default is the time of order
     total DECIMAL(6,2),
