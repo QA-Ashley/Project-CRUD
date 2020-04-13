@@ -25,17 +25,25 @@ CREATE TABLE IF NOT EXISTS halloscream.product (
 	product_id INT AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
     category VARCHAR(25) NOT NULL,
+    quantity TINYINT NOT NULL,
     price DECIMAL(6,2) NOT NULL,
     PRIMARY KEY (product_id)
 );
 CREATE TABLE IF NOT EXISTS halloscream.`order` (
-	order_id INT AUTO_INCREMENT,
+	order_number INT AUTO_INCREMENT,
     fk_customer_id INT NOT NULL,
-    fk_product_id INT NOT NULL,
-    quantity TINYINT NOT NULL,
     date_placed DATETIME DEFAULT CURRENT_TIMESTAMP, # Default is the time of order
     total DECIMAL(6,2),
-    PRIMARY KEY (order_id),
-    FOREIGN KEY (fk_customer_id) REFERENCES halloscream.customer(customer_id),
+    PRIMARY KEY (order_number),
+    FOREIGN KEY (fk_customer_id) REFERENCES halloscream.customer(customer_id)
+);
+CREATE TABLE IF NOT EXISTS halloscream.orderProduct (
+	order_item_id INT AUTO_INCREMENT,
+    fk_order_number INT NOT NULL,
+    fk_product_id INT NOT NULL,
+    quantity TINYINT NOT NULL,
+    price DECIMAL(6,2),
+    PRIMARY KEY (order_item_id),
+    FOREIGN KEY (fk_order_number) REFERENCES halloscream.`order`(order_number),
     FOREIGN KEY (fk_product_id) REFERENCES halloscream.product(product_id)
 );
