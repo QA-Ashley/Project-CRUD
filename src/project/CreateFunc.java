@@ -3,9 +3,144 @@ package project;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 public class CreateFunc extends Database {
+	
+	public void viewOptions(int option) {
+		Scanner scan = new Scanner(System.in);
+		Menu menu = new Menu();
+		
+		switch (option) {
+		case 1:
+			System.out.println("Enter first name: ");
+			String fname = scan.nextLine();
+			System.out.println("Enter last name: ");
+			String lname = scan.nextLine();
+			System.out.println("Enter username: ");
+			String uname = scan.nextLine();
+			System.out.println("Enter email address: ");
+			String email = scan.nextLine();
+			System.out.println("Enter password: ");
+			String password = scan.nextLine();
+			System.out.println("Enter address line one: ");
+			String addressOne = scan.nextLine();
+			System.out.println("Enter address line two: ");
+			String addressTwo = scan.nextLine();
+			System.out.println("Enter town/city: ");
+			String town = scan.nextLine();
+			System.out.println("Enter postcode: ");
+			String postcode = scan.nextLine();
+
+			if (createCustomer(fname, lname, uname, email, password, addressOne, addressTwo, town,
+					postcode)) {
+				System.out.println("Customer created.");
+				menu.subMenu(option);
+			} else {
+				System.out.println("Error creating customer, returning to menu..");
+				menu.subMenu(option);
+			}
+			break;
+		case 2:
+			List<Order> orders = new ArrayList<Order>();
+			int amount = -1;
+			do {
+				try {
+					System.out.println("How many products in the order? ");
+					amount = scan.nextInt();
+				} catch (InputMismatchException e1) {
+					System.out.println("Input has to be a number");
+				}
+			} while (amount <= 0);
+			int customerID = -1;
+			int productID = -1;
+			int productQuantity = -1;
+			boolean proceed = false;
+
+			do {
+				try {
+					System.out.println("Enter customer ID for the order: ");
+					customerID = scan.nextInt();
+				} catch (InputMismatchException e1) {
+					System.out.println("Input must be a number");
+				}
+			} while (customerID <= 0);
+
+			for (int i = 0; i < amount; i++) {
+				proceed = false;
+				do {
+					try {
+						System.out.println("Enter product id: ");
+						productID = scan.nextInt();
+						System.out.println("Enter quantity: ");
+						productQuantity = scan.nextInt();
+						orders.add(new Order(customerID, productID, productQuantity));
+						proceed = true;
+					} catch (InputMismatchException e1) {
+						System.out.println("Input must be a number");
+					}
+				} while (!proceed);
+			}
+
+			if (createOrder(orders)) {
+				System.out.println("Order created");
+				menu.subMenu(option);
+			} else {
+				System.out.println("Error creating order, returning to menu..");
+				menu.subMenu(option);
+			}
+			break;
+		case 3:
+			System.out.println("Enter product name: ");
+			String name = scan.nextLine();
+			System.out.println("Enter product category: ");
+			String category = scan.nextLine();
+			short quantity = -1;
+			double price = -1;
+
+			do {
+				try {
+					System.out.println("Enter product quantity: ");
+					quantity = scan.nextShort();
+				} catch (InputMismatchException e1) {
+					System.out.println("Value needs to be between 0-255.");
+					quantity = -1;
+					scan.next();
+				}
+			} while (quantity == -1);
+
+			do {
+				try {
+					System.out.println("Enter product price: ");
+					price = scan.nextDouble();
+				} catch (InputMismatchException e1) {
+					System.out.println("Price needs to be a number.");
+					price = -1;
+					scan.next();
+				}
+			} while (price == -1);
+
+			if (createProduct(name, category, quantity, price)) {
+				System.out.println("Product created.");
+				menu.subMenu(option);
+			} else {
+				System.out.println("Error creating product, returning to menu..");
+				menu.subMenu(option);
+			}
+			break;
+		case 4:
+			menu.selectMenu();
+			break;
+		case 5:
+			System.exit(0);
+			break;
+		}
+		scan.close();
+	}
+	
 	protected boolean createCustomer(String fname, String lname, String uname, String email, String password,
 			String addressOne, String addressTwo, String town, String postcode) {
 		if (postcode.length() > 8) {

@@ -3,9 +3,83 @@ package project;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 public class DeleteFunc extends Database {
+	
+	public void viewOptions(int option) {
+		Scanner scan = new Scanner(System.in);
+		Menu menu = new Menu();
+		
+		switch (option) {
+		case 1:
+			int customerID = 0;
+			do {
+				try {
+					System.out.println("Enter customer ID: ");
+					customerID = scan.nextInt();
+				} catch (InputMismatchException e1) {
+					System.out.println("Customer ID needs to be a number.");
+					scan.next();
+				}
+			} while (customerID == 0);
+			if(deleteCustomer(customerID)) {
+				System.out.println("Customer deleted");
+				menu.subMenu(option);
+			} else {
+				System.out.println("Error deleting customer, returning to menu..");
+				menu.subMenu(option);
+			}
+			break;
+		case 2:
+			int orderNo = 0;
+			do {
+				try {
+					System.out.println("Enter Order number: ");
+					orderNo = scan.nextInt();
+				} catch (InputMismatchException e1) {
+					System.out.println("Order number needs to be a number.");
+					scan.next();
+				}
+			} while (orderNo == 0 || orderNo < 0);
+			if(deleteOrder(orderNo)) {
+				System.out.println("Order deleted");
+				menu.subMenu(option);
+			} else {
+				System.out.println("Error deleting order, returning to menu..");
+				menu.subMenu(option);
+			}
+			break;
+		case 3:
+			int productID = 0;
+			do {
+				try {
+					System.out.println("Enter product ID: ");
+					productID = scan.nextInt();
+				} catch (InputMismatchException e1) {
+					System.out.println("Product ID needs to be a number.");
+					scan.next();
+				}
+			} while (productID == 0);
+			if(deleteProduct(productID)) {
+				System.out.println("Product created");
+				menu.subMenu(option);
+			} else {
+				System.out.println("Error deleting product, returning to menu..");
+			}
+			break;
+		case 4:
+			menu.selectMenu();
+			break;
+		case 5:
+			System.exit(0);
+			break;
+		}
+		scan.close();
+	}
+	
 	protected boolean deleteCustomer(int customerID) {
 		String sql = "SELECT order_number FROM `order` WHERE fk_customer_id=" + customerID;
 		ResultSet rs = null;
