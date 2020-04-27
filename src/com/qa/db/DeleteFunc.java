@@ -15,6 +15,8 @@ public class DeleteFunc extends Database {
 		Scanner scan = new Scanner(System.in);
 		Inputs input = new Inputs();
 		Menu menu = new Menu();
+		int orderNo;
+		int productID;
 		
 		switch (option) {
 		case 1:
@@ -28,7 +30,7 @@ public class DeleteFunc extends Database {
 			menu.subMenu(previousMenu);
 			break;
 		case 2:
-			int orderNo = input.getOrderNo(scan);
+			orderNo = input.getOrderNo(scan);
 			
 			if(deleteOrder(orderNo)) {
 				System.out.println("Order deleted");
@@ -38,7 +40,19 @@ public class DeleteFunc extends Database {
 			menu.subMenu(previousMenu);
 			break;
 		case 3:
-			int productID = input.getProductID(scan);
+			orderNo = input.getOrderNo(scan);
+			productID = input.getProductID(scan);
+			int quantity = input.getProductQuantity(scan);
+			
+			if(deleteOrderProduct(orderNo, productID, quantity)) {
+				System.out.println("Product deleted from order");
+			} else {
+				System.out.println("Error deleting product from order, returning to menu..");
+			}
+			menu.subMenu(previousMenu);
+			break;
+		case 4:
+			productID = input.getProductID(scan);
 			
 			if(deleteProduct(productID)) {
 				System.out.println("Product created");
@@ -47,10 +61,10 @@ public class DeleteFunc extends Database {
 			}
 			menu.subMenu(previousMenu);
 			break;
-		case 4:
+		case 5:
 			menu.selectMenu();
 			break;
-		case 5:
+		case 6:
 			System.exit(0);
 			break;
 		}
@@ -104,8 +118,80 @@ public class DeleteFunc extends Database {
 		}
 		return false;
 	}
+	
+	private boolean deleteOrderProduct(int orderNo, int productID, int quantity) {
+		/*
+		 * Grab quantity of product order in orderProduct table
+		 * currentquantity - quantity
+		 * if <0 then error
+		 * delete product or update quantity and price
+		 * update order table with new price
+		 */
+		String checkQuantity = "SELECT quantity, price FROM orderProduct WHERE fk_order_number="+orderNo+" AND fk_product_id="+productID;
+		ResultSet rs = null;
+		
+		int orderQuantity = 0;
+		double price = 0;
+		try {
+			rs = stmt.executeQuery(checkQuantity);
+			if(rs.isBeforeFirst()) {
+				while(rs.next()) {
+					orderQuantity = rs.getInt("quantity");
+					price = rs.getDouble("price");
+				}
+			} else {
+				System.out.println("Order does not exist with product ID: " + productID);
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		price = price/orderQuantity;
+		
+		orderQuantity = orderQuantity - quantity;
+		
+		if(orderQuantity < 0) {
+			System.out.println("You are trying to delete more products than exists within the order");
+			return false;
+		} else if(orderQuantity == 0) {
+			String delete = "DELETE FROM orderProduct WHERE fk_order_number="+orderNo+" AND fk_product_id="+productID;
+			try {
+				stmt.executeUpdate(delete);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} else {
+			String update = "UPDATE orderProduct SET quantity="+orderQuantity+" WHERE fk_order_number="+orderNo+" AND fk_product_id="+productID;
+			try {
+				stmt.executeUpdate(update);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		String getStock = "SELECT quantity FROM product WHERE product_id="+productID;
+		int currentStock = 0;
+		try {
+			rs = stmt.executeQuery(getStock);
+			while(rs.next()) {
+				currentStock = rs.getInt("quantity");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		currentStock += quantity;
+		UpdateFunc update = new UpdateFunc();
+		CreateFunc c = new CreateFunc();
+		update.updateProduct("quantity", currentStock, productID);
+		
+		double total = c.getTotal(orderNo);
+		
+		if(update.updateOrder("total", total, orderNo)) {
+			return true;
+		}
+		return false;
+	}
 
-	private boolean deleteProduct(int productID) {
+ 	private boolean deleteProduct(int productID) {
 		String sql = "DELETE FROM product WHERE product_id=" + productID;
 
 		try {

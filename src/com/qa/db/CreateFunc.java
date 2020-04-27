@@ -14,12 +14,12 @@ import com.qa.menu.Order;
 import com.qa.menu.Security;
 
 public class CreateFunc extends Database {
-	
+
 	public void viewOptions(int option, int previousMenu) {
 		Scanner scan = new Scanner(System.in);
 		Inputs input = new Inputs();
 		Menu menu = new Menu();
-		
+
 		switch (option) {
 		case 1:
 			System.out.println("Enter first name: ");
@@ -41,8 +41,7 @@ public class CreateFunc extends Database {
 			System.out.println("Enter postcode: ");
 			String postcode = scan.nextLine();
 
-			if (createCustomer(fname, lname, uname, email, password, addressOne, addressTwo, town,
-					postcode)) {
+			if (createCustomer(fname, lname, uname, email, password, addressOne, addressTwo, town, postcode)) {
 				System.out.println("Customer created.");
 			} else {
 				System.out.println("Error creating customer, returning to menu..");
@@ -64,8 +63,6 @@ public class CreateFunc extends Database {
 			int productID = -1;
 			int productQuantity = -1;
 			boolean proceed = false;
-
-			
 
 			for (int i = 0; i < amount; i++) {
 				proceed = false;
@@ -91,6 +88,18 @@ public class CreateFunc extends Database {
 			menu.subMenu(previousMenu);
 			break;
 		case 3:
+			int orderNo = input.getOrderNo(scan);
+			int newProduct = input.getProductID(scan);
+			int newQuantity = input.getProductQuantity(scan);
+
+			if (addToOrder(orderNo, newProduct, newQuantity)) {
+				System.out.println("Product added to order");
+			} else {
+				System.out.println("Error adding to order, returning to menu..");
+			}
+			menu.subMenu(previousMenu);
+			break;
+		case 4:
 			System.out.println("Enter product name: ");
 			String name = scan.nextLine();
 			System.out.println("Enter product category: ");
@@ -105,16 +114,16 @@ public class CreateFunc extends Database {
 			}
 			menu.subMenu(previousMenu);
 			break;
-		case 4:
+		case 5:
 			menu.selectMenu();
 			break;
-		case 5:
+		case 6:
 			System.exit(0);
 			break;
 		}
 		scan.close();
 	}
-	
+
 	private boolean createCustomer(String fname, String lname, String uname, String email, String password,
 			String addressOne, String addressTwo, String town, String postcode) {
 		if (postcode.length() > 8) {
@@ -276,13 +285,68 @@ public class CreateFunc extends Database {
 		return false;
 	}
 
-	private double getTotal(int orderNumber) {
-		String sql3 = "SELECT SUM(price) AS total FROM orderProduct WHERE fk_order_number=" + orderNumber;
+	private boolean addToOrder(int orderNo, int productID, int quantity) {
+
+		// check if the order exists
+		ViewFunc view = new ViewFunc();
+		if (!view.viewSingleOrder(orderNo)) {
+			System.out.println("Order Number " + orderNo + " doesn't exist");
+			return false;
+		}
+
+		int currentStock = checkStock(productID);
+
+		if (currentStock < quantity) {
+			System.out.println("Current stock is lower than " + quantity + ". Please try again with a lower quantity");
+			return false;
+		}
+
+		String fetchPrice = "SELECT price from product WHERE product_id=" + productID;
+		ResultSet rs = null;
+		double price = 0;
+		try {
+			rs = stmt.executeQuery(fetchPrice);
+			if (rs.isBeforeFirst()) {
+				while (rs.next()) {
+					price = rs.getDouble("price");
+				}
+			} else {
+				System.out.println("Product ID " + productID + " doesn't exist");
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		price = price * quantity;
+
+		String addProduct = "INSERT INTO orderProduct VALUES(0," + orderNo + "," + productID + "," + quantity + ","
+				+ price + ")";
+		try {
+			stmt.executeUpdate(addProduct);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		currentStock = currentStock - quantity;
+		UpdateFunc update = new UpdateFunc();
+		update.updateProduct("quantity", currentStock, productID);
+		
+		double total = getTotal(orderNo);
+		
+		if(update.updateOrder("total", total, orderNo)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	protected double getTotal(int orderNumber) {
+		String sql = "SELECT SUM(price) AS total FROM orderProduct WHERE fk_order_number=" + orderNumber;
 		ResultSet rs = null;
 
 		double totalPrice = 0;
 		try {
-			rs = stmt.executeQuery(sql3);
+			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				totalPrice = rs.getDouble("total");
 			}
@@ -336,6 +400,22 @@ public class CreateFunc extends Database {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}
+		return currentStock;
+	}
+
+	private int checkStock(int productID) {
+		String sql = "SELECT quantity FROM product WHERE product_id=" + productID;
+		ResultSet rs = null;
+
+		int currentStock = 0;
+		try {
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				currentStock = rs.getInt("quantity");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return currentStock;
 	}

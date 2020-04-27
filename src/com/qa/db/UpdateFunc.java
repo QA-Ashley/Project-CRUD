@@ -140,7 +140,7 @@ public class UpdateFunc extends Database implements Options {
 		}
 	}
 
-	private void updateProduct(String column, String value, int id) {
+	protected void updateProduct(String column, String value, int id) {
 		String sql = "UPDATE product SET " + column + "='" + value + "' WHERE product_id=" + id;
 
 		try {
@@ -152,7 +152,7 @@ public class UpdateFunc extends Database implements Options {
 		}
 	}
 
-	private void updateProduct(String column, int value, int id) {
+	protected void updateProduct(String column, int value, int id) {
 		String sql = "UPDATE product SET " + column + "=" + value + " WHERE product_id=" + id;
 
 		try {
@@ -174,6 +174,20 @@ public class UpdateFunc extends Database implements Options {
 			e.printStackTrace();
 			System.out.println("Error changing " + column + " to " + value + " for product ID: " + id);
 		}
+	}
+	
+	protected boolean updateOrder(String column, double price, int orderNo) {
+		String sql = "UPDATE `order` SET " + column + "=" + price + " WHERE order_number=" + orderNo;
+
+		try {
+			stmt.executeUpdate(sql);
+			System.out.println("Successfully changed " + column + " to " + price + " for Order number: " + orderNo);
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error changing " + column + " to " + price + " for Order number: " + orderNo);
+		}
+		return false;
 	}
 
 }
