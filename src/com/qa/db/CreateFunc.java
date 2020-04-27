@@ -318,11 +318,34 @@ public class CreateFunc extends Database {
 			e.printStackTrace();
 		}
 		price = price * quantity;
-
-		String addProduct = "INSERT INTO orderProduct VALUES(0," + orderNo + "," + productID + "," + quantity + ","
-				+ price + ")";
+		
+		String itemExist = "Select quantity FROM orderProduct WHERE fk_order_number="+orderNo+" AND fk_product_id="+productID;
+		int currentOrderQuantity = 0;
+		boolean exist = false;
 		try {
-			stmt.executeUpdate(addProduct);
+			rs = stmt.executeQuery(itemExist);
+			if(rs.isBeforeFirst()) {
+				exist = true;
+				while(rs.next()) {
+					currentOrderQuantity = rs.getInt("quantity");
+				}
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		currentOrderQuantity += quantity;
+		
+		String sql;
+		if(exist) {
+			price = currentOrderQuantity*(price/quantity);
+			sql = "UPDATE orderProduct SET quantity="+currentOrderQuantity+", price="+price+" WHERE fk_order_number="+orderNo+" AND fk_product_id="+productID;
+		} else {
+			sql = "INSERT INTO orderProduct VALUES(0," + orderNo + "," + productID + "," + quantity + ","
+					+ price + ")";
+		}
+		
+		try {
+			stmt.executeUpdate(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -336,7 +359,6 @@ public class CreateFunc extends Database {
 		if(update.updateOrder("total", total, orderNo)) {
 			return true;
 		}
-
 		return false;
 	}
 
