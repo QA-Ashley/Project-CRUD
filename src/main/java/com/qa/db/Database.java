@@ -1,4 +1,4 @@
-package com.qa.db;
+package main.java.com.qa.db;
 
 
 import java.sql.Connection;
@@ -8,14 +8,17 @@ import java.sql.Statement;
 
 public class Database {
 	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost:3306/halloscream?allowPublicKeyRetrieval=true&useSSL=false";
+	static String db;
+	static String DB_URL;
 	static final String USER = "root";
 	static final String PASS = "root";
 
 	public Connection conn = null;
 	public Statement stmt = null;
 
-	public Database() {
+	public Database(String db) {
+		Database.db = db;
+		Database.DB_URL = "jdbc:mysql://localhost:3306/"+db+"?allowPublicKeyRetrieval=true&useSSL=false";
 		try {
 			Class.forName(JDBC_DRIVER);
 		} catch (ClassNotFoundException e) {
@@ -23,7 +26,6 @@ public class Database {
 		}
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			System.out.println("Database connected");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -33,12 +35,7 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
-
-	
-
-
-
-	
-
-
+	public Statement getStmt() {
+		return stmt;
+	}
 }
