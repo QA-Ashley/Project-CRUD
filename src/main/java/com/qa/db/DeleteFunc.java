@@ -91,7 +91,7 @@ public class DeleteFunc extends Database {
 
 		try {
 			stmt.executeUpdate(sql);
-			System.out.println("Product created");
+			System.out.println("Product deleted");
 			return true;
 		} catch (SQLException e) {
 			System.out.println("Error deleting product, returning to menu..");

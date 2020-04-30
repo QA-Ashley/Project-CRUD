@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class MenuTests {
+public class MenuTest {
 
 	Menu menu = new Menu();
 	
@@ -23,7 +23,7 @@ public class MenuTests {
 	
 	@Test
 	public void viewMenuTest() {
-		String expected = "1 : View customers\t\t2 : View a customers address\t\t3 : View customer orders\n"
+		String expected = "\n1 : View customers\t\t2 : View a customers address\t\t3 : View customer orders\n"
 				+ "4 : View orders\t\t\t5 : View single order\t\t\t6 : View products\n"
 				+ "7 : Customer total spend\t8 : Back to main menu\t\t\t9 : Exit application";
 		assertEquals(expected, menu.viewMenu());
@@ -31,21 +31,21 @@ public class MenuTests {
 	
 	@Test
 	public void amendMenuTest() {
-		String expected = "1 : Update customer details\t2 : Update product details\t3 : Back to main menu\n"
+		String expected = "\n1 : Update customer details\t2 : Update product details\t3 : Back to main menu\n"
 				+ "4 : Exit application";
 		assertEquals(expected, menu.amendMenu());
 	}
 	
 	@Test
 	public void insertMenuTest() {
-		String expected = "1 : Create new customer\t2 : Create new order\t3 : Add product to order\n"
+		String expected = "\n1 : Create new customer\t2 : Create new order\t3 : Add product to order\n"
 				+ "4 : Create new product\t5 : Back to main menu\t6 : Exit application";
 		assertEquals(expected, menu.insertMenu());
 	}
 	
 	@Test
 	public void deleteMenuTest() {
-		String expected = "1 : Delete a customer\t2 : Delete an order\t3 : Delete a product from an order\n"
+		String expected = "\n1 : Delete a customer\t2 : Delete an order\t3 : Delete a product from an order\n"
 				+ "4 : Delete a product\t5 : Back to main menu\t6 : Exit application";
 		assertEquals(expected, menu.deleteMenu());
 	}

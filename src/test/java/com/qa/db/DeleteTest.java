@@ -19,7 +19,7 @@ import main.java.com.qa.db.DeleteFunc;
 import main.java.com.qa.db.General;
 import main.java.com.qa.menu.Order;
 
-public class DeleteTests {
+public class DeleteTest {
 	
 	static final String db = "halloscreamtest";
 	static Database database = new Database(db);

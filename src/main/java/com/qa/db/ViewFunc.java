@@ -24,7 +24,7 @@ public class ViewFunc extends Database {
 					String email = rs.getString("email");
 					String password = rs.getString("password");
 					System.out.println("ID: " + customerID + " First Name: " + fname + "\tLast Name: " + lname
-							+ "\tUsername: " + user + "\tEmail: " + email + "\tPassword: " + password);
+							+ "\tUsername: " + user + "\tEmail: " + email + "\t\tPassword: " + password);
 				}
 				return true;
 			}

@@ -20,7 +20,7 @@ import main.java.com.qa.db.General;
 import main.java.com.qa.db.ViewFunc;
 import main.java.com.qa.menu.Order;
 
-public class ViewTests {
+public class ViewTest {
 	
 	static final String db = "halloscreamtest";
 	static Database database = new Database(db);

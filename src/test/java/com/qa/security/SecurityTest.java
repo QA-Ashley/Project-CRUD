@@ -7,7 +7,7 @@ import main.java.com.qa.security.Security;
 
 import java.security.NoSuchAlgorithmException;
 
-public class SecurityTests {
+public class SecurityTest {
 	
 	Security s = new Security();
 	

@@ -11,14 +11,15 @@ public class Database {
 	static String db;
 	static String DB_URL;
 	static final String USER = "root";
-	static final String PASS = "root";
+	static final String PASS = "toor";
 
 	public Connection conn = null;
 	public Statement stmt = null;
 
+	
 	public Database(String db) {
 		Database.db = db;
-		Database.DB_URL = "jdbc:mysql://localhost:3306/"+db+"?allowPublicKeyRetrieval=true&useSSL=false";
+		Database.DB_URL = "jdbc:mysql://35.189.114.24/"+db;//+"?allowPublicKeyRetrieval=true&useSSL=false";
 		try {
 			Class.forName(JDBC_DRIVER);
 		} catch (ClassNotFoundException e) {

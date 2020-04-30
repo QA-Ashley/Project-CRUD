@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import main.java.com.qa.menu.Order;
 
-public class OrderTests {
+public class OrderTest {
 
 	List<Order> orders = new ArrayList<Order>();
 	
