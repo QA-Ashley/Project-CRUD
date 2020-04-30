@@ -17,52 +17,30 @@ public class DeleteMenu implements Options{
 		switch (option) {
 		case 1:
 			int customerID = input.getCustomerID(scan);
-
-			if (delete.deleteCustomer(customerID)) {
-				System.out.println("Customer deleted");
-			} else {
-				System.out.println("Error deleting customer, returning to menu..");
-			}
+			delete.deleteCustomer(customerID);
 			menu.subMenu(previousMenu);
 			break;
 		case 2:
 			orderNo = input.getOrderNo(scan);
-
-			if (delete.deleteOrder(orderNo)) {
-				System.out.println("Order deleted");
-			} else {
-				System.out.println("Error deleting order, returning to menu..");
-			}
+			delete.deleteOrder(orderNo);
 			menu.subMenu(previousMenu);
 			break;
 		case 3:
 			orderNo = input.getOrderNo(scan);
 			productID = input.getProductID(scan);
 			int quantity = input.getProductQuantity(scan);
-
-			if (delete.deleteProductOrder(orderNo, productID, quantity)) {
-				System.out.println("Product deleted from order");
-			} else {
-				System.out.println("Error deleting product from order, returning to menu..");
-			}
+			delete.deleteProductOrder(orderNo, productID, quantity);
 			menu.subMenu(previousMenu);
 			break;
 		case 4:
 			productID = input.getProductID(scan);
-
-			if (delete.deleteProduct(productID)) {
-				System.out.println("Product created");
-			} else {
-				System.out.println("Error deleting product, returning to menu..");
-			}
+			delete.deleteProduct(productID);
 			menu.subMenu(previousMenu);
 			break;
 		case 5:
 			menu.selectMenu();
-			break;
 		case 6:
 			System.exit(0);
-			break;
 		}
 		scan.close();
 	}

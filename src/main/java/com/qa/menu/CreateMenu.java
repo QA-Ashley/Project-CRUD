@@ -1,6 +1,5 @@
 package main.java.com.qa.menu;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -36,15 +35,11 @@ public class CreateMenu implements Options{
 			System.out.println("Enter postcode: ");
 			String postcode = scan.nextLine();
 
-			if (create.createCustomer(fname, lname, uname, email, password, addressOne, addressTwo, town, postcode)) {
-				System.out.println("Customer created.");
-			} else {
-				System.out.println("Error creating customer, returning to menu..");
-			}
+			create.createCustomer(fname, lname, uname, email, password, addressOne, addressTwo, town, postcode);
 			menu.subMenu(previousMenu);
 			break;
 		case 2:
-			List<Order> orders = new ArrayList<Order>();
+			
 			int amount = -1;
 			do {
 				try {
@@ -55,43 +50,15 @@ public class CreateMenu implements Options{
 				}
 			} while (amount <= 0);
 			int customerID = input.getCustomerID(scan);
-			int productID = -1;
-			int productQuantity = -1;
-			boolean proceed = false;
-
-			for (int i = 0; i < amount; i++) {
-				proceed = false;
-				do {
-					try {
-						System.out.println("Enter product id: ");
-						productID = scan.nextInt();
-						System.out.println("Enter quantity: ");
-						productQuantity = scan.nextInt();
-						orders.add(new Order(customerID, productID, productQuantity));
-						proceed = true;
-					} catch (InputMismatchException e1) {
-						System.out.println("Input must be a number");
-					}
-				} while (!proceed);
-			}
-
-			if (create.createOrder(orders)) {
-				System.out.println("Order created");
-			} else {
-				System.out.println("Error creating order, returning to menu..");
-			}
+			List<Order> orders = input.getProductsForOrder(amount, customerID, scan);
+			create.createOrder(orders);
 			menu.subMenu(previousMenu);
 			break;
 		case 3:
 			int orderNo = input.getOrderNo(scan);
 			int newProduct = input.getProductID(scan);
 			int newQuantity = input.getProductQuantity(scan);
-
-			if (create.addToOrder(orderNo, newProduct, newQuantity)) {
-				System.out.println("Product added to order");
-			} else {
-				System.out.println("Error adding to order, returning to menu..");
-			}
+			create.addToOrder(orderNo, newProduct, newQuantity);
 			menu.subMenu(previousMenu);
 			break;
 		case 4:
@@ -102,19 +69,13 @@ public class CreateMenu implements Options{
 			short quantity = input.getProductQuantity(scan);
 			double price = input.getProductPrice(scan);
 
-			if (create.createProduct(name, category, quantity, price)) {
-				System.out.println("Product created.");
-			} else {
-				System.out.println("Error creating product, returning to menu..");
-			}
+			create.createProduct(name, category, quantity, price);
 			menu.subMenu(previousMenu);
 			break;
 		case 5:
 			menu.selectMenu();
-			break;
 		case 6:
 			System.exit(0);
-			break;
 		}
 		scan.close();
 	}

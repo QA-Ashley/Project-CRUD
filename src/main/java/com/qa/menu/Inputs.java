@@ -1,6 +1,8 @@
 package main.java.com.qa.menu;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Inputs {
@@ -18,6 +20,30 @@ public class Inputs {
 			}
 		} while (productID <= 0);
 		return productID;
+	}
+	
+	public List<Order> getProductsForOrder(int amount, int customerID, Scanner scan){
+		List<Order> orders = new ArrayList<Order>();
+		int productID = -1;
+		int productQuantity = -1;
+		boolean proceed = false;
+
+		for (int i = 0; i < amount; i++) {
+			proceed = false;
+			do {
+				try {
+					System.out.println("Enter product id: ");
+					productID = scan.nextInt();
+					System.out.println("Enter quantity: ");
+					productQuantity = scan.nextInt();
+					orders.add(new Order(customerID, productID, productQuantity));
+					proceed = true;
+				} catch (InputMismatchException e1) {
+					System.out.println("Input must be a number");
+				}
+			} while (!proceed);
+		}
+		return orders;
 	}
 	
 	public short getProductQuantity(Scanner scan) {

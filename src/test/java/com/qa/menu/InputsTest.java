@@ -2,11 +2,14 @@ package test.java.com.qa.menu;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import org.junit.Test;
 
 import main.java.com.qa.menu.Inputs;
+import main.java.com.qa.menu.Order;
 
 public class InputsTest {
 	
@@ -24,6 +27,15 @@ public class InputsTest {
 		Scanner s = new Scanner("1");
 		assertEquals(1, i.getProductQuantity(s));
 		s.close();
+	}
+	
+	@Test
+	public void getProductsForOrder() {
+		Scanner s = new Scanner("1 2");
+		List<Order> orders = new ArrayList<Order>();
+		orders.add(new Order(1, 1, 2));
+		List<Order> orders2 = i.getProductsForOrder(1, 1, s);
+		assertEquals(orders.get(0).getCustomerID(), orders2.get(0).getCustomerID());
 	}
 	
 	@Test

@@ -2,10 +2,6 @@ package main.java.com.qa.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-//import java.util.Scanner;
-//
-//import main.java.com.qa.menu.Inputs;
-//import main.java.com.qa.menu.Menu;
 
 public class ViewFunc extends Database {
 

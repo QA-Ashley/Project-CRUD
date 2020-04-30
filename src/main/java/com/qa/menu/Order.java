@@ -1,4 +1,4 @@
-package project;
+package main.java.com.qa.menu;
 
 public class Order {
 	private int customerID;

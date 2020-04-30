@@ -6,30 +6,27 @@ import java.util.Scanner;
 public class Menu {
 	protected String db = "halloscream";
 
-	public void displayMainMenu() {
-		System.out.println(".##..##...####...##......##.......####....####....####...#####...######...####...##...##.\n"
+	public String displayMainMenu() {
+		return ".##..##...####...##......##.......####....####....####...#####...######...####...##...##.\n"
 				+ ".##..##..##..##..##......##......##..##..##......##..##..##..##..##......##..##..###.###.\n"
 				+ ".######..######..##......##......##..##...####...##......#####...####....######..##.#.##.\n"
 				+ ".##..##..##..##..##......##......##..##......##..##..##..##..##..##......##..##..##...##.\n"
 				+ ".##..##..##..##..######..######...####....####....####...##..##..######..##..##..##...##.\n"
-				+ ".........................................................................................\n");
-
-		System.out.println(
-				"1 : View data.\n" + "2 : Amend data.\n" + "3 : Insert data.\n" + "4 : Delete data.\n" + "5 : Exit.");
+				+ ".........................................................................................\n"
+				+ "1 : View data.\n" + "2 : Amend data.\n" + "3 : Insert data.\n" + "4 : Delete data.\n" + "5 : Exit.";
 	}
 
 	public void selectMenu() {
 		Scanner input = new Scanner(System.in);
 		int incorrectChoice = 0;
-
 		Integer choice = null;
 
-		displayMainMenu();
+		System.out.println(displayMainMenu());
 
 		do {
 			try {
 				if (incorrectChoice == 5) {
-					displayMainMenu();
+					System.out.println(displayMainMenu());
 					incorrectChoice = 0;
 				}
 				System.out.println("What would you like to do: ");
@@ -52,11 +49,8 @@ public class Menu {
 		input.close();
 	}
 
-<<<<<<< HEAD:src/project/Menu.java
-	protected void subMenu(int choice) {
-=======
+
 	public void subMenu(int choice) {
->>>>>>> database-integration:src/main/java/com/qa/menu/Menu.java
 		String menu = "";
 
 		switch (choice) {
@@ -92,20 +86,7 @@ public class Menu {
 			} catch (InputMismatchException e1) {
 				System.out.println("Please enter a correct option.");
 			}
-<<<<<<< HEAD:src/project/Menu.java
-			if (choice == 1 && decision >= 1 && decision <= 8) { // Read
-				ViewFunc view = new ViewFunc();
-				view.viewOptions(decision);
-			} else if (choice == 2 && decision >= 1 && decision <= 9) { // Update
-				UpdateFunc update = new UpdateFunc();
-				update.viewOptions(decision);
-			} else if (choice == 3 && decision >= 1 && decision <= 5) { // Create
-				CreateFunc create = new CreateFunc();
-				create.viewOptions(decision);
-			} else if (choice == 4 && decision >= 1 && decision <= 5) { // Delete
-				DeleteFunc delete = new DeleteFunc();
-				delete.viewOptions(decision);
-=======
+
 			if (choice == 1 && decision >= 1 && decision <= 9) { // Read
 				ViewMenu view = new ViewMenu();
 				view.viewOptions(decision, choice);
@@ -118,36 +99,29 @@ public class Menu {
 			} else if (choice == 4 && decision >= 1 && decision <= 6) { // Delete
 				DeleteMenu delete = new DeleteMenu();
 				delete.viewOptions(decision, choice);
->>>>>>> database-integration:src/main/java/com/qa/menu/Menu.java
 			}
 			incorrectDecision++;
 		} while (!check);
 		scan.close();
 	}
 
-	private String viewMenu() {
-<<<<<<< HEAD:src/project/Menu.java
-		return "1 : View customers\t2 : View a customers address\t3 : View customer orders\n"
-				+ "4 : View orders\t\t5 : View products\t\t6 : View total spend by customer\n"
-				+ "7 : Back to main menu\t8 : Exit application";
-=======
+	public String viewMenu() {
 		return "1 : View customers\t\t2 : View a customers address\t\t3 : View customer orders\n"
 				+ "4 : View orders\t\t\t5 : View single order\t\t\t6 : View products\n"
 				+ "7 : Customer total spend\t8 : Back to main menu\t\t\t9 : Exit application";
->>>>>>> database-integration:src/main/java/com/qa/menu/Menu.java
 	}
 
-	private String amendMenu() {
+	public String amendMenu() {
 		return "1 : Update customer details\t2 : Update product details\t3 : Back to main menu\n"
 				+ "4 : Exit application";
 	}
 
-	private String insertMenu() {
+	public String insertMenu() {
 		return "1 : Create new customer\t2 : Create new order\t3 : Add product to order\n"
 				+ "4 : Create new product\t5 : Back to main menu\t6 : Exit application";
 	}
 
-	private String deleteMenu() {
+	public String deleteMenu() {
 		return "1 : Delete a customer\t2 : Delete an order\t3 : Delete a product from an order\n"
 				+ "4 : Delete a product\t5 : Back to main menu\t6 : Exit application";
 	}

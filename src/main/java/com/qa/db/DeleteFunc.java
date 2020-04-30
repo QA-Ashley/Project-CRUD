@@ -13,14 +13,13 @@ public class DeleteFunc extends Database {
 		General general = new General();
 		List<Integer> orders = general.retrieveOrders(customerID, stmt);
 		if (!orders.isEmpty()) {
-			if (!deleteCustomerOrders(orders, customerID)) {
-				System.out.println("Error deleting orders");
-				return false;
-			}
+			deleteCustomerOrders(orders, customerID);
 		}
 		if (cleanUpCustomer(customerID)) {
+			System.out.println("Customer deleted");
 			return true;
 		}
+		System.out.println("Error deleting customer, returning to menu..");
 		return false;
 	}
 
@@ -30,8 +29,10 @@ public class DeleteFunc extends Database {
 		try {
 			stmt.executeUpdate(sql);
 			stmt.executeUpdate(sql2);
+			System.out.println("Order deleted");
 			return true;
 		} catch (SQLException e) {
+			System.out.println("Error deleting order, returning to menu..");
 			e.printStackTrace();
 		}
 		return false;
@@ -78,8 +79,10 @@ public class DeleteFunc extends Database {
 		double total = general.getTotal(orderNo, stmt);
 
 		if (u.updateOrder("total", total, orderNo)) {
+			System.out.println("Product deleted from order");
 			return true;
 		}
+		System.out.println("Error deleting product from order, returning to menu..");
 		return false;
 	}
 
@@ -88,8 +91,10 @@ public class DeleteFunc extends Database {
 
 		try {
 			stmt.executeUpdate(sql);
+			System.out.println("Product created");
 			return true;
 		} catch (SQLException e) {
+			System.out.println("Error deleting product, returning to menu..");
 			e.printStackTrace();
 		}
 		return false;

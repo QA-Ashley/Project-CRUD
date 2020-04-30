@@ -30,6 +30,12 @@ public class CreateTests {
 	public void createCustomerTest() {
 		assertTrue(c.createCustomer("Bob", "Gringles", "gringlator", "bobbby1@live.co.uk", "reallySecure",
 				"123 negra lane", "", "Leeds", "LE1 6DW"));
+		assertFalse(c.createCustomer("Bob", "Gringles", "gringlator", "bobbby1@live.co.uk", "reallySecure",
+				"123 negra lane", "", "Leeds", "LE1 6DW"));
+		assertFalse(c.createCustomer("Bob", "Gringles", "gringlator2", "bobbby1@live.co.uk", "reallySecure",
+				"123 negra lane", "", "Leeds", "LE1 6DW"));
+		assertFalse(c.createCustomer("Bob", "Gringles", "gringlator2", "bobbby1@live.co.uk", "reallySecure",
+				"123 negra lane", "", "Leeds", "LE1 6DW3GD"));
 	}
 
 	@Test

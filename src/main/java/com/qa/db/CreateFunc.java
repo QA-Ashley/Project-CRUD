@@ -33,18 +33,17 @@ public class CreateFunc extends Database {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-
-		if (!insertCustomer(fname, lname, uname, email, password)) {
-			return false;
-		}
+		insertCustomer(fname, lname, uname, email, password);
 
 		int id = general.getCustomerId(uname, stmt);
 		if (id == 0) {
 			return false;
 		}
 		if (insertAddress(id, addressOne, addressTwo, town, postcode)) {
+			System.out.println("Customer created.");
 			return true;
 		}
+		System.out.println("Error creating customer, returning to menu..");
 		return false;
 	}
 
@@ -56,10 +55,12 @@ public class CreateFunc extends Database {
 		String sql = "INSERT INTO product VALUES(0,'" + name + "','" + category + "'," + quantity + "," + price + ")";
 		try {
 			stmt.executeUpdate(sql);
+			System.out.println("Product created.");
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Error creating product, returning to menu..");
 		return false;
 	}
 
@@ -79,10 +80,7 @@ public class CreateFunc extends Database {
 		if (currentStock.length != entries) {
 			return false;
 		}
-
-		if(!insertOrder(customerID)) {
-			return false;
-		}
+		insertOrder(customerID);
 
 		int orderNumber = general.getOrderNo(customerID, stmt);
 		double[] prices = general.getProductPrices(entries, productID, quantity, stmt);
@@ -101,12 +99,13 @@ public class CreateFunc extends Database {
 		UpdateFunc update = new UpdateFunc(db);
 		update.updateStock(entries, quantity, currentStock, productID);
 
-		// Calculates the total price of the order
 		double totalPrice = general.getTotal(orderNumber, stmt);
 		
 		if(update.updateOrder("total", totalPrice, orderNumber)) {
+			System.out.println("Order created");
 			return true;
 		}
+		System.out.println("Error creating order, returning to menu..");
 		return false;
 	}
 
@@ -153,8 +152,10 @@ public class CreateFunc extends Database {
 		double total = general.getTotal(orderNo, stmt);
 
 		if (update.updateOrder("total", total, orderNo)) {
+			System.out.println("Product added to order");
 			return true;
 		}
+		System.out.println("Error adding to order, returning to menu..");
 		return false;
 	}
 

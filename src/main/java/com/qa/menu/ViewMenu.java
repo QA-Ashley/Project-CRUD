@@ -40,10 +40,8 @@ public class ViewMenu implements Options{
 			break;
 		case 8:
 			menu.selectMenu();
-			break;
 		case 9:
 			System.exit(0);
-			break;
 		}
 		menu.subMenu(previousMenu);
 		scan.close();

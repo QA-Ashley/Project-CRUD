@@ -23,6 +23,11 @@ java product-CRUD.java
 ## Entity Relationship Diagram
 ![](https://github.com/QA-Ashley/Project-CRUD/blob/master/documentation/ERD.png)
 
+## Test Coverage
+
+Tests conducted with junit and has a coverage of 80.1%. Limitations on time has prevented a higher percentage and code had to be refactored in order for some tests to be run.
+![](https://github.com/QA-Ashley/Project-CRUD/blob/master/documentation/coverage.png)
+
 ## Acknowledgments
 
-Thanks to the dream team of Vinesh, Piers and Savannah for helping guide me when I massively confused.
+Thanks to the dream team of Vinesh, Piers and Savannah for helping guide me when I was massively confused.

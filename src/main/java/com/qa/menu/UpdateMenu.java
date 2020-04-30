@@ -106,10 +106,8 @@ public class UpdateMenu implements Options{
 			break;
 		case 3:
 			menu.selectMenu();
-			break;
 		case 4:
 			System.exit(0);
-			break;
 		}
 		scan.close();
 	}
