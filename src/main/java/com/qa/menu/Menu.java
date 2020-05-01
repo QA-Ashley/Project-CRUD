@@ -83,11 +83,10 @@ public class Menu {
 			
 			try {
 				decision = scan.nextInt();
-				scan.nextLine();
 			} catch (InputMismatchException e1) {
 				System.out.println("Please enter a correct option.");
 			}
-
+			scan.next();
 			if (choice == 1 && decision >= 1 && decision <= 9) { // Read
 				check = true;
 				ViewMenu view = new ViewMenu();
