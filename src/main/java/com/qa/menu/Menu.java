@@ -35,15 +35,16 @@ public class Menu {
 				System.out.println("Choice not accepted.\n");
 				input.next();
 			}
-			if (choice.intValue() == 5) {
-				System.out.println("Exiting...");
-				System.exit(0);
-			}
+			
 			if (choice != null && choice.intValue() > 5) {
 				System.out.println("Incorrect Choice");
 			}
 			incorrectChoice++;
-		} while (choice == null || choice.intValue() > 4 || choice.intValue() <= 0);
+		} while (choice == null || choice.intValue() > 5 || choice.intValue() <= 0);
+		if (choice.intValue() == 5) {
+			System.out.println("Exiting...");
+			System.exit(0);
+		}
 		subMenu(choice.intValue());
 
 		input.close();
@@ -79,7 +80,7 @@ public class Menu {
 				incorrectDecision = 0;
 			}
 			System.out.println("Please enter you selection: ");
-			check = true;
+			
 			try {
 				decision = scan.nextInt();
 				scan.nextLine();
@@ -88,15 +89,19 @@ public class Menu {
 			}
 
 			if (choice == 1 && decision >= 1 && decision <= 9) { // Read
+				check = true;
 				ViewMenu view = new ViewMenu();
 				view.viewOptions(decision, choice);
 			} else if (choice == 2 && decision >= 1 && decision <= 4) { // Update
+				check = true;
 				UpdateMenu update = new UpdateMenu();
 				update.viewOptions(decision, choice);
 			} else if (choice == 3 && decision >= 1 && decision <= 6) { // Create
+				check = true;
 				CreateMenu create = new CreateMenu();
 				create.viewOptions(decision, choice);
 			} else if (choice == 4 && decision >= 1 && decision <= 6) { // Delete
+				check = true;
 				DeleteMenu delete = new DeleteMenu();
 				delete.viewOptions(decision, choice);
 			}
